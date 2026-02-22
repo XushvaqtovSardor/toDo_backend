@@ -1,15 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTodoDto } from './dto/create-todo.dto';
+import { CreateTodoDto, FindDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { startWith } from 'rxjs';
 
 @Injectable()
 export class TodoService {
+  constructor(private prisma: PrismaService) { }
   create(createTodoDto: CreateTodoDto) {
-    return 'This action adds a new todo';
+    const task = this.prisma.task.create({ data: { text: createTodoDto.text } })
+    return task
   }
 
-  findAll() {
-    return `This action returns all todo`;
+  findAll(query: FindDto) {
+    const { status, search } = query
+    let statustask;
+    if (status == 'active') {
+      statustask = false
+    } else if (status == 'completed') {
+      statustask = true
+    } else {
+      statustask = undefined
+    }
+    const filter = {
+      text: search ? { startsWith: search } : undefined,
+      completed: statustask
+    }
+    return this.prisma.task.findMany()
   }
 
   findOne(id: number) {
