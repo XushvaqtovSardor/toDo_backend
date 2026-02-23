@@ -31,10 +31,22 @@ export class TodoService {
     return task
 
   }
+  async toggleStatus(id: number) {
+    const task = await this.prisma.task.findFirst({ where: { id } })
+    if (!task) throw new NotFoundException(`Task with ${id} not found`)
+    const updatedTask = await this.prisma.task.update({
+      where: { id },
+      data: {
+        completed: !task.completed
+      }
+    })
+    return updatedTask
+  }
+
   async update(id: number, updateTodoDto: UpdateTodoDto) {
     const task = await this.prisma.task.findFirst({ where: { id } })
     if (!task) throw new NotFoundException(`Task with ${id} not found`)
-    if(updateTodoDto.completed==undefined && updateTodoDto.text==undefined) throw new BadRequestException
+    if (updateTodoDto.completed == undefined && updateTodoDto.text == undefined) throw new BadRequestException
     const updatedTask = await this.prisma.task.update({
       where: { id },
       data: {
@@ -55,18 +67,18 @@ export class TodoService {
       updateCount: reult.count
     }
   }
-  deleteAll(){
+  deleteAll() {
     return this.prisma.task.deleteMany()
   }
   async remove(id: number) {
-    const task=await this.prisma.task.delete({where:{id}})
+    const task = await this.prisma.task.delete({ where: { id } })
     return {
-      message:`Task with ${task.id} successfully deleted `
+      message: `Task with ${task.id} successfully deleted `
     }
   }
-  async deleteCompleted(){
-    const task=await this.prisma.task.deleteMany({where:{completed:true}})
-    if(!task) throw new NotFoundException('compeleted tasks doesnt exists')
-  } 
+  async deleteCompleted() {
+    const task = await this.prisma.task.deleteMany({ where: { completed: true } })
+    if (!task) throw new NotFoundException('compeleted tasks doesnt exists')
+  }
 
 }

@@ -43,6 +43,17 @@ export class TodoController {
   }
 
 
+  @Patch(':id/toggle')
+  @ApiResponse({
+    status: 200,
+    description: 'task status toggled',
+    type: TodoResponseDto
+  })
+  @ApiBadRequestResponse({ description: 'task not found' })
+  toggleStatus(@Param('id', ParseIntPipe) id: number) {
+    return this.todoService.toggleStatus(+id);
+  }
+
   @Patch(':id')
   @ApiResponse({
     status: 200,
@@ -56,18 +67,18 @@ export class TodoController {
 
   @Delete('deleteCompleted')
   @ApiResponse({
-    status:200,
-    description:'completed tasks deleted'
+    status: 200,
+    description: 'completed tasks deleted'
   })
-  @ApiInternalServerErrorResponse({description:'problem with deleting completed tasks'})
-  deleteCompleted(){
+  @ApiInternalServerErrorResponse({ description: 'problem with deleting completed tasks' })
+  deleteCompleted() {
     return this.todoService.deleteCompleted()
   }
 
   @Delete('deleteAllTask')
   @ApiResponse({
-    status:200,
-    description:'All tasks successfully deleted'
+    status: 200,
+    description: 'All tasks successfully deleted'
   })
   @ApiInternalServerErrorResponse({ description: 'malumotlar olishda xatolik' })
   deleteAll() {
