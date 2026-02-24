@@ -57,7 +57,7 @@ export class TodoController {
   @Patch(':id')
   @ApiResponse({
     status: 200,
-    description: 'task completed',
+    description: 'task  completed',
     type: TodoResponseDto
   })
   @ApiBadRequestResponse({ description: 'invalid increditails' })
