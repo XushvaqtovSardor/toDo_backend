@@ -60,7 +60,7 @@ export class TodoController {
     description: 'task   completed',
     type: TodoResponseDto
   })
-  @ApiBadRequestResponse({ description: 'invalid increditails' })
+  @ApiBadRequestResponse({ description: 'invalid   increditails' })
   update(@Param('id', ParseIntPipe) id: number, @Body() updateTodoDto: UpdateTodoDto) {
     return this.todoService.update(+id, updateTodoDto);
   }
